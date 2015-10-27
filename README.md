@@ -1,0 +1,3 @@
+# component-silver-chartmargins
+
+Silver Bullet component uses D3 to dynamically append text content (title etc) to the chart SVG, adjusting margins accordingly...
