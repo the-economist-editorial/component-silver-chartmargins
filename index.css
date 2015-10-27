@@ -1,7 +1,23 @@
-.silver-title-string {
-  fill: #FFFFFF;
+.silver-title-string,
+.silver-subtitle-string,
+.silver-source-string,
+.silver-footnote-string {
+  fill: #333;
   strokewidth: 0;
-  font-family: Officina sans-serif;
+  font-family: Helvetica;
   font-size: 12px;
-  text-align: left;
+  text-anchor: start;
+}
+
+.silver-subtitle-string {
+  font-size: 10px;
+}
+
+.silver-source-string {
+  font-size: 8px;
+}
+
+.silver-footnote-string {
+  font-size: 8px;
+  text-anchor: end;
 }
