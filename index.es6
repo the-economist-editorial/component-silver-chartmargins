@@ -1,3 +1,4 @@
+// SilverChartMargins is a child of ChartWrapper
 import Dthree from 'd3';
 import React from 'react';
 
@@ -7,6 +8,7 @@ export default class SilverChartMargins extends React.Component {
   static get propTypes() {
     return {
       test: React.PropTypes.string,
+      config: React.PropTypes.object,
       textArray: React.PropTypes.array,
       extraMargins: React.PropTypes.object,
     };
@@ -15,12 +17,16 @@ export default class SilverChartMargins extends React.Component {
   // DEFAULT PROPS
   static get defaultProps() {
     return {
-      textArray: [
-        { 's': 'Title to come...', 'x': 12, 'y': 15, 'class': 'silver-title-string' },
-        { 's': 'Subtitle to come...', 'x': 12, 'y': 30, 'class': 'silver-subtitle-string' },
-        { 's': 'Source: to come', 'x': 12, 'y': 5, 'class': 'silver-source-string' },
-        { 's': 'Footnote to come...', 'x': 12, 'y': 5, 'class': 'silver-footnote-string' },
-      ],
+      config: {
+        strings: {
+          // (co-ords are text anchor -- bottom left/right)
+          title: { 'content': 'Title', 'x': 12, 'y': 15, 'class': 'silver-title-string' },
+          subtitle: { 'content': 'Subtitle', 'x': 12, 'y': 30, 'class': 'silver-subtitle-string' },
+          source: { 'content': 'Source', 'x': 12, 'y': -5, 'class': 'silver-source-string' },
+          footnote: { 'content': 'Footnote', 'x': -12, 'y': -5, 'class': 'silver-footnote-string' },
+        },
+        dimensions: { 'width': 160, 'height': 155 },
+      },
       extraMargins: {
         title: 0,
         subtitle: 0,
@@ -39,9 +45,12 @@ export default class SilverChartMargins extends React.Component {
     };
   }
 
-  // componentWillMount() {
-  //   console.log('Will mount');
-  // }
+  componentWillMount() {
+    // Disentangle the strings from the inherited config object
+    const strings = this.props.config.strings;
+    const textArray = Object.keys(strings).map((key) => strings[key]);
+    this.setState({ textArray });
+  }
 
   componentDidMount() {
     this.updateStrings();
@@ -57,6 +66,8 @@ export default class SilverChartMargins extends React.Component {
   updateStrings() {
     const textArray = this.state.textArray;
     const extraMargins = this.state.extraMargins;
+    const chartWidth = this.props.config.dimensions.width;
+    const chartHeight = this.props.config.dimensions.height;
     // Context
     const marginsGroup = Dthree.select('.silver-chart-margins-group');
     // Append text strings to D3 group:
@@ -66,10 +77,24 @@ export default class SilverChartMargins extends React.Component {
       .append('text')
       .attr({
         'class': (ddd) => ddd.class,
-        'x': (ddd) => ddd.x,
-        'y': (ddd) => ddd.y,
+        'x': (ddd) => {
+          let val = ddd.x;
+          if (val < 0) {
+            // If xpos < 0, we're positioning relative to right edge
+            val += chartWidth;
+          }
+          return val;
+        },
+        'y': (ddd) => {
+          let val = ddd.y;
+          if (val < 0) {
+            // If ypos < 0, we're positioning relative to bottom
+            val += chartHeight;
+          }
+          return val;
+        },
       })
-      .text((ddd) => ddd.s);
+      .text((ddd) => ddd.content);
   }
   // UPDATE STRINGS ends
 
@@ -77,12 +102,9 @@ export default class SilverChartMargins extends React.Component {
 
   // RENDER
   render() {
-    // Axis group
+    // Group as strings context...
     return (
-      <svg>
-      <g className="silver-chart-margins-group">
-      </g>
-      </svg>
+      <g className="silver-chart-margins-group"/>
     );
   }
 }

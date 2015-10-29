@@ -1,7 +1,7 @@
-.silver-title-string,
-.silver-subtitle-string,
-.silver-source-string,
-.silver-footnote-string {
+.silver-d3-title-string,
+.silver-d3-subtitle-string,
+.silver-d3-source-string,
+.silver-d3-footnote-string {
   fill: #333;
   strokewidth: 0;
   font-family: Helvetica;
@@ -9,15 +9,15 @@
   text-anchor: start;
 }
 
-.silver-subtitle-string {
+.silver-d3-subtitle-string {
   font-size: 10px;
 }
 
-.silver-source-string {
+.silver-d3-source-string {
   font-size: 8px;
 }
 
-.silver-footnote-string {
+.silver-d3-footnote-string {
   font-size: 8px;
   text-anchor: end;
 }

@@ -126,7 +126,7 @@
   },
   "dependencies": {
     "d3": "^3.5.6",
-    "react": "^0.13.3"
+    "react": "^0.14.0"
   },
   "devDependencies": {
     "@economist/component-devpack": "^3.4.3",
