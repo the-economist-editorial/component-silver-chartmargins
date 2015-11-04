@@ -65,16 +65,22 @@ export default class SilverChartMargins extends React.Component {
   // UPDATE STRINGS
   updateStrings() {
     const textArray = this.state.textArray;
+    // OK: next isn't used... but it might be... eventually.
     const extraMargins = this.state.extraMargins;
     const chartWidth = this.props.config.dimensions.width;
     const chartHeight = this.props.config.dimensions.height;
     // Context
     const marginsGroup = Dthree.select('.silver-chart-margins-group');
-    // Append text strings to D3 group:
-    marginsGroup.selectAll('text')
-      .data(textArray)
+    // Bind text strings to D3 group:
+    const boundText = marginsGroup.selectAll('text')
+      .data(textArray);
+    // Enter
+    boundText
       .enter()
-      .append('text')
+      .append('text');
+    // Update
+    boundText
+      .transition().duration(500)
       .attr({
         'class': (ddd) => ddd.class,
         'x': (ddd) => {
@@ -95,6 +101,8 @@ export default class SilverChartMargins extends React.Component {
         },
       })
       .text((ddd) => ddd.content);
+      // Exit
+    boundText.exit().remove();
   }
   // UPDATE STRINGS ends
 
