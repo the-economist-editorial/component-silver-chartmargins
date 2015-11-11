@@ -4,20 +4,32 @@
 .silver-d3-footnote-string {
   fill: #333;
   strokewidth: 0;
-  font-family: Helvetica;
-  font-size: 12px;
+  font-family: 'OfficinaSanITC-Book';
+  font-size: 9px;
   text-anchor: start;
+  color: #000000;
+}
+
+.silver-d3-title-string {
+  font-family: 'OfficinaSanITC-Bold';
 }
 
 .silver-d3-subtitle-string {
-  font-size: 10px;
+  font-size: 7px;
 }
 
 .silver-d3-source-string {
-  font-size: 8px;
+  font-size: 6px;
 }
 
 .silver-d3-footnote-string {
-  font-size: 8px;
+  font-size: 6px;
   text-anchor: end;
+}
+
+.silver-d3-background-rect {
+  -webkit-transition: all 500 ease-in-out;
+  -moz-transition: all 500 ease-in-out;
+  -o-transition: all 500 ease-in-out;
+  transition: all 500 ease-in-out;
 }

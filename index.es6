@@ -53,14 +53,43 @@ export default class SilverChartMargins extends React.Component {
   }
 
   componentDidMount() {
+    this.updateBackground();
     this.updateStrings();
   }
 
   componentDidUpdate() {
+    this.updateBackground();
     this.updateStrings();
   }
 
   // ===== Dthree stuff begins =====
+
+  updateBackground() {
+    const backArray = this.props.config.background;
+    // Context
+    const marginsGroup = Dthree.select('.silver-chart-margins-group');
+    const boundShape = marginsGroup.selectAll('rect')
+      .data(backArray)
+      ;
+    // Enter
+    boundShape.enter().append('rect')
+      .attr({
+        'class': 'silver-d3-background-rect',
+        'fill': (ddd) => ddd.fill,
+      });
+    // Update
+    boundShape
+      .transition().duration(2000)
+      .attr({
+        'x': (ddd) => ddd.x,
+        'y': (ddd) => ddd.y,
+        'height': (ddd) => ddd.height,
+        'width': (ddd) => ddd.width,
+      })
+    ;
+    // Exit
+    boundShape.exit().remove();
+  }
 
   // UPDATE STRINGS
   updateStrings() {
@@ -110,7 +139,6 @@ export default class SilverChartMargins extends React.Component {
 
   // RENDER
   render() {
-    // Group as strings context...
     return (
       <g className="silver-chart-margins-group"/>
     );
