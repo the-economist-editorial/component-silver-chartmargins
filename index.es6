@@ -1,4 +1,4 @@
-// SilverChartMargins is a child of ChartWrapper
+// SilverChartMargins is a child of the current chart style componentWillMount
 import Dthree from 'd3';
 import React from 'react';
 
@@ -15,6 +15,7 @@ export default class SilverChartMargins extends React.Component {
   }
 
   // DEFAULT PROPS
+  // This component maintains class names for the elements that it appends
   static get defaultProps() {
     return {
       stringClasses: {
@@ -45,7 +46,6 @@ export default class SilverChartMargins extends React.Component {
 
   componentWillMount() {
     // Append class names to string definitions
-    // debugger;
     const target = this.props.config.strings;
     const strList = Object.keys(target);
     const source = this.props.stringClasses;
@@ -73,6 +73,9 @@ export default class SilverChartMargins extends React.Component {
 
   updateBackground() {
     const backArray = this.props.config.backgroundShapes;
+    const chartHeight = this.props.config.dimensions.outerbox.height;
+    // Next not used... yet.
+    // const chartWidth = this.props.config.dimensions.outerbox.width;
     // Context
     const marginsGroup = Dthree.select('.silver-chart-margins-group');
     const boundShape = marginsGroup.selectAll('rect')
@@ -90,7 +93,13 @@ export default class SilverChartMargins extends React.Component {
       .attr({
         'x': (ddd) => ddd.x,
         'y': (ddd) => ddd.y,
-        'height': (ddd) => ddd.height,
+        'height': (ddd) => {
+          let height = ddd.height;
+          if (ddd.adjustable.height) {
+            height = chartHeight;
+          }
+          return height;
+        },
         'width': (ddd) => ddd.width,
       })
     ;
@@ -178,11 +187,10 @@ export default class SilverChartMargins extends React.Component {
       const words = content.split(/\s+/).reverse();
       // X pos for tspans
       const xPos = `${thisText.attr('x')}px`;
+      // Bostock's original had a linecounter, but I don't seem to need that...
       let line = [];
-      let lineNumber = 0;
       const leading = `${thisText.attr('leading')}px`;
-      let dyPos = 0;
-      let tspan = thisText.text(null).append('tspan').attr('x', xPos).attr('dy', `${dyPos}em`);
+      let tspan = thisText.text(null).append('tspan').attr('x', xPos).attr('dy', 0);
       while (words.length > 0) {
         const word = words.pop();
         line.push(word);
@@ -192,13 +200,9 @@ export default class SilverChartMargins extends React.Component {
           line.pop();
           tspan.text(line.join(' '));
           line = [ word ];
-          lineNumber++;
-          // dyPos = `${leading}em`;
-          // dyPos = `${lineNumber * leading}em`;
           tspan = thisText.append('tspan').attr('x', xPos).attr('dy', leading).text(word);
         }
       }
-      // console.log(content + 'spread over ' + (lineNumber + 1) + ' lines');
     });
   }
   // WRAP TEXT ends
