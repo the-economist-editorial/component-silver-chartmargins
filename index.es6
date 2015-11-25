@@ -1,4 +1,5 @@
 // SilverChartMargins is a child of the current chart style componentWillMount
+/* eslint-disable prefer-reflect */
 import Dthree from 'd3';
 import React from 'react';
 
@@ -45,8 +46,32 @@ export default class SilverChartMargins extends React.Component {
   }
 
   componentWillMount() {
+    const strings = this.props.config.strings;
+    this.restateStrings(strings);
+  }
+
+  componentDidMount() {
+    this.updateBackground();
+    this.updateStrings();
+  }
+
+  componentWillReceiveProps(newProps) {
+    const strings = newProps.config.strings;
+    this.restateStrings(strings);
+  }
+
+  componentDidUpdate() {
+    this.updateBackground();
+    this.updateStrings();
+  }
+
+  // RESTATE STRINGS
+  // Called from componentWillMount/ReceiveProps
+  // Appends classes to strings (from internal prop)
+  // Then converts strings object to D3-friendly array,
+  // which it puts on state...
+  restateStrings(target) {
     // Append class names to string definitions
-    const target = this.props.config.strings;
     const strList = Object.keys(target);
     const source = this.props.stringClasses;
     for (const i in strList) {
@@ -57,16 +82,6 @@ export default class SilverChartMargins extends React.Component {
     // Convert to array (for D3)
     const textArray = Object.keys(target).map((key) => target[key]);
     this.setState({ textArray });
-  }
-
-  componentDidMount() {
-    this.updateBackground();
-    this.updateStrings();
-  }
-
-  componentDidUpdate() {
-    this.updateBackground();
-    this.updateStrings();
   }
 
   // ===== Dthree stuff begins =====
