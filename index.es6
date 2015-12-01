@@ -89,8 +89,7 @@ export default class SilverChartMargins extends React.Component {
   updateBackground() {
     const backArray = this.props.config.backgroundShapes;
     const chartHeight = this.props.config.dimensions.outerbox.height;
-    // Next not used... yet.
-    // const chartWidth = this.props.config.dimensions.outerbox.width;
+    const chartWidth = this.props.config.dimensions.outerbox.width;
     // Context
     const marginsGroup = Dthree.select('.silver-chart-margins-group');
     const boundShape = marginsGroup.selectAll('rect')
@@ -108,14 +107,27 @@ export default class SilverChartMargins extends React.Component {
       .attr({
         'x': (ddd) => ddd.x,
         'y': (ddd) => ddd.y,
+        // Height and width can be absolute px values, or a percent
+        // of the containing outerbox...
         'height': (ddd) => {
+          // Default is value from context config
           let height = ddd.height;
+          // But if element's size is adjustable, express as % of outerbox
+          // (assumed to be percent val)
           if (ddd.adjustable.height) {
-            height = chartHeight;
+            const percent = parseFloat(ddd.height, 10);
+            height = chartHeight / 100 * percent;
           }
           return height;
         },
-        'width': (ddd) => ddd.width,
+        'width': (ddd) => {
+          let width = ddd.width;
+          if (ddd.adjustable.width) {
+            const percent = parseFloat(ddd.width, 10);
+            width = chartWidth / 100 * percent;
+          }
+          return width;
+        },
       })
     ;
     // Exit
