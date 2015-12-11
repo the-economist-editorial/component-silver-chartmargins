@@ -39,7 +39,7 @@ export default class SilverChartMargins extends React.Component {
     super(props);
     this.state = {
       'textArray': {},
-      // I don't know if this'll ever get used, but it's
+      // NOTE: I don't know if this'll ever get used, but it's
       // at least a reminder to myself...
       'extraMargins': props.extraMargins,
     };
@@ -67,7 +67,7 @@ export default class SilverChartMargins extends React.Component {
 
   // RESTATE STRINGS
   // Called from componentWillMount/ReceiveProps
-  // Appends classes to strings (from internal prop)
+  // Appends classes (from internal prop) to strings.
   // Then converts strings object to D3-friendly array,
   // which it puts on state...
   restateStrings(target) {
@@ -86,10 +86,13 @@ export default class SilverChartMargins extends React.Component {
 
   // ===== Dthree stuff begins =====
 
+  // UPDATE BACKGROUND
+  // Background shapes...
   updateBackground() {
-    const backArray = this.props.config.backgroundShapes;
-    const chartHeight = this.props.config.dimensions.outerbox.height;
-    const chartWidth = this.props.config.dimensions.outerbox.width;
+    const config = this.props.config;
+    const backArray = config.backgroundShapes;
+    const chartHeight = config.dimensions.outerbox.height;
+    const chartWidth = config.dimensions.outerbox.width;
     // Context
     const marginsGroup = Dthree.select('.silver-chart-margins-group');
     const boundShape = marginsGroup.selectAll('rect')
@@ -103,7 +106,7 @@ export default class SilverChartMargins extends React.Component {
       });
     // Update
     boundShape
-      .transition().duration(2000)
+      .transition().duration(config.duration)
       .attr({
         'x': (ddd) => ddd.x,
         'y': (ddd) => ddd.y,
@@ -136,11 +139,12 @@ export default class SilverChartMargins extends React.Component {
 
   // UPDATE STRINGS
   updateStrings() {
+    const config = this.props.config;
     const textArray = this.state.textArray;
     // NOTE: next isn't used... but it might be... eventually.
     // const extraMargins = this.state.extraMargins;
-    const chartWidth = this.props.config.dimensions.outerbox.width;
-    const chartHeight = this.props.config.dimensions.outerbox.height;
+    const chartWidth = config.dimensions.outerbox.width;
+    const chartHeight = config.dimensions.outerbox.height;
     // Context
     const marginsGroup = Dthree.select('.silver-chart-margins-group');
     // Bind text strings to D3 group:
@@ -152,7 +156,7 @@ export default class SilverChartMargins extends React.Component {
       .append('text');
     // Update
     boundText
-      .transition().duration(500)
+      .transition().duration(config.duration)
       .attr({
         'wrapwidth': (ddd) => ddd.wrapwidth,
         'leading': (ddd) => {
