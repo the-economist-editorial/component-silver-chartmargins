@@ -159,9 +159,7 @@ export default class SilverChartMargins extends React.Component {
       .transition().duration(config.duration)
       .attr({
         'wrapwidth': (ddd) => ddd.wrapwidth,
-        'leading': (ddd) => {
-          return ddd.leading;
-        },
+        'leading': (ddd) => ddd.leading,
         'class': (ddd) => ddd.class,
         'x': (ddd) => {
           let val = ddd.x;
